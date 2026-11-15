@@ -1,0 +1,18 @@
+services:
+  cobalt:
+    image: ghcr.io/imputnet/cobalt:11
+    init: true
+    read_only: true
+    restart: unless-stopped
+    container_name: social-videos-cobalt
+    ports:
+      - "127.0.0.1:9000:9000/tcp"
+    environment:
+      API_URL: "${COBALT_PUBLIC_URL}"
+      API_KEY_URL: "file:///keys.json"
+      API_AUTH_REQUIRED: "1"
+      CORS_WILDCARD: "0"
+      RATELIMIT_MAX: "25"
+      TUNNEL_RATELIMIT_MAX: "50"
+    volumes:
+      - ./keys.json:/keys.json:ro
