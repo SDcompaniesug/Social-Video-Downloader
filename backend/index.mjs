@@ -20,11 +20,11 @@ async function thumb(url){
   }
   const r=await fetch(u,{headers:{'user-agent':'Mozilla/5.0 (Linux; Android 10) AppleWebKit/537.36 Chrome/122.0.0.0 Mobile Safari/537.36','accept':'text/html,application/xhtml+xml'},redirect:'follow',signal:AbortSignal.timeout(10000)});
   if(!r.ok||!(r.headers.get('content-type')||'').includes('text/html'))return null;
-  const h=(await r.text()).slice(0,900000),tags=h.match(/<meta\\b[^>]*>/gi)||[];
+  const h=(await r.text()).slice(0,900000),tags=h.match(/<meta\b[^>]*>/gi)||[];
   for(const tag of tags){
-   const prop=(tag.match(/(?:property|name)\\s*=\\s*["']([^"']+)["']/i)||[])[1]?.toLowerCase();
+   const prop=(tag.match(/(?:property|name)\s*=\s*["']([^"']+)["']/i)||[])[1]?.toLowerCase();
    if(!['og:image','og:image:secure_url','twitter:image'].includes(prop||''))continue;
-   const content=(tag.match(/content\\s*=\\s*["']([^"']+)["']/i)||[])[1];
+   const content=(tag.match(/content\s*=\s*["']([^"']+)["']/i)||[])[1];
    if(content){const imageUrl=new URL(content.replace(/&amp;/g,'&'),r.url||u.href);if(['http:','https:'].includes(imageUrl.protocol))return imageUrl.href}
   }
   return null;
