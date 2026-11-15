@@ -1,0 +1,1 @@
+{"name":"social-videos-api","version":"1.0.0","private":true,"type":"module","dependencies":{"jose":"^6.1.3","pg":"^8.16.3"}}
