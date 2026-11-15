@@ -4,11 +4,12 @@ on:
   workflow_dispatch:
   push:
     paths:
-      - "backend/**"
+      - "backend/index.mjs"
+      - "backend/package.json"
       - ".github/workflows/neon-function-bundle.yml"
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   bundle:
@@ -28,10 +29,11 @@ jobs:
           npx --yes esbuild@0.25.11 index.mjs --bundle --platform=node --target=node24 --format=esm --packages=bundle --external:pg-native --minify --outfile=dist/index.mjs
           printf '{"name":"social-videos-function","private":true,"type":"module"}\n' > dist/package.json
           cd dist
-          zip -q -r ../socialvideos-function.zip index.mjs package.json
-      - uses: actions/upload-artifact@v4
+          zip -9 -q -X ../socialvideos-function.zip index.mjs package.json
+          cd ..
+          base64 -w0 socialvideos-function.zip > socialvideos-function.zip.b64
+      - name: Publish temporary deployment bundle
+        uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          name: socialvideos-neon-function
-          path: backend/socialvideos-function.zip
-          if-no-files-found: error
-          retention-days: 7
+          commit_message: "Build temporary Neon Function bundle"
+          file_pattern: "backend/socialvideos-function.zip.b64"
