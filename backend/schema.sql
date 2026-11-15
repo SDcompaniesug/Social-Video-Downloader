@@ -1,0 +1,5 @@
+CREATE TABLE IF NOT EXISTS api_keys (id uuid PRIMARY KEY DEFAULT gen_random_uuid(), user_id uuid NOT NULL, name text NOT NULL DEFAULT 'My application', key_prefix text NOT NULL, key_hash text NOT NULL UNIQUE, created_at timestamptz NOT NULL DEFAULT now(), last_used_at timestamptz, revoked_at timestamptz);
+CREATE INDEX IF NOT EXISTS api_keys_user_created_idx ON api_keys(user_id, created_at DESC);
+CREATE INDEX IF NOT EXISTS api_keys_hash_idx ON api_keys(key_hash) WHERE revoked_at IS NULL;
+CREATE TABLE IF NOT EXISTS api_usage (id bigserial PRIMARY KEY, user_id uuid NOT NULL, api_key_id uuid REFERENCES api_keys(id) ON DELETE SET NULL, platform text NOT NULL, format text NOT NULL, success boolean NOT NULL DEFAULT false, created_at timestamptz NOT NULL DEFAULT now());
+CREATE INDEX IF NOT EXISTS api_usage_user_created_idx ON api_usage(user_id, created_at DESC);
