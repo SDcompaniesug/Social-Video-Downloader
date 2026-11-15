@@ -1,0 +1,37 @@
+name: Build Neon Function Bundle
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "backend/**"
+      - ".github/workflows/neon-function-bundle.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  bundle:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Install backend dependencies
+        working-directory: backend
+        run: npm install --no-audit --no-fund
+      - name: Bundle runtime dependencies
+        working-directory: backend
+        run: |
+          mkdir -p dist
+          npx --yes esbuild@0.25.11 index.mjs --bundle --platform=node --target=node24 --format=esm --packages=bundle --external:pg-native --outfile=dist/index.mjs
+          printf '{"name":"social-videos-function","private":true,"type":"module"}\n' > dist/package.json
+          cd dist
+          zip -q -r ../socialvideos-function.zip index.mjs package.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: socialvideos-neon-function
+          path: backend/socialvideos-function.zip
+          if-no-files-found: error
+          retention-days: 7
