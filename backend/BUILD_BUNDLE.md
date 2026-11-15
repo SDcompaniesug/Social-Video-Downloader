@@ -1,0 +1,1 @@
+The Neon Function deployment archive is produced by the GitHub Actions workflow at .github/workflows/neon-function-bundle.yml. It bundles pg and jose into index.mjs so the Neon runtime does not need to resolve bare package imports at startup.
