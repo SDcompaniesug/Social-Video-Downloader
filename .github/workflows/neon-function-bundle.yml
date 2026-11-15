@@ -26,10 +26,11 @@ jobs:
         working-directory: backend
         run: |
           mkdir -p dist
-          npx --yes esbuild@0.25.11 index.mjs --bundle --platform=node --target=node24 --format=esm --packages=bundle --external:pg-native --banner:js='import { createRequire as __createRequire } from "node:module"; const require = __createRequire(import.meta.url);' --minify --outfile=dist/index.mjs
-          printf '{"name":"social-videos-function","private":true,"type":"module"}\n' > dist/package.json
+          npx --yes esbuild@0.25.11 index.mjs --bundle --platform=node --target=node24 --format=cjs --packages=bundle --external:pg-native --minify --outfile=dist/index.cjs
+          printf "import handler from './index.cjs';\\nexport default handler.default ?? handler;\\n" > dist/index.mjs
+          printf '{"name":"social-videos-function","private":true,"type":"module"}\\n' > dist/package.json
           cd dist
-          zip -9 -q -X ../socialvideos-function.zip index.mjs package.json
+          zip -9 -q -X ../socialvideos-function.zip index.mjs index.cjs package.json
           cd ..
           base64 -w0 socialvideos-function.zip > socialvideos-function.zip.b64
       - name: Publish temporary deployment bundle
