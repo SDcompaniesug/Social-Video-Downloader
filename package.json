@@ -1,8 +1,0 @@
-{
-  "name": "social-videos-deploy-bootstrap",
-  "private": true,
-  "version": "1.0.0",
-  "scripts": {
-    "build": "base64 -d social-videos-source.zip.b64 > social-videos-source.zip && mkdir -p .build && unzip -q social-videos-source.zip -d .build && cd .build/social-videos/site && npm install --no-audit --no-fund && npm run build"
-  }
-}
