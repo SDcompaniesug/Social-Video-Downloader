@@ -1,0 +1,7 @@
+{
+  "REPLACE_WITH_A_RANDOM_UUID_V4": {
+    "name": "social-videos-backend",
+    "limit": 25,
+    "allowedServices": ["tiktok", "instagram", "facebook", "youtube", "twitter", "pinterest", "snapchat"]
+  }
+}
