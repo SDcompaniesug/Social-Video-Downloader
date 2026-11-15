@@ -1,4 +1,4 @@
-name: Build Neon Function Bundle
+name: Build and publish Neon Function Bundle
 
 on:
   workflow_dispatch:
