@@ -25,7 +25,7 @@ jobs:
         working-directory: backend
         run: |
           mkdir -p dist
-          npx --yes esbuild@0.25.11 index.mjs --bundle --platform=node --target=node24 --format=esm --packages=bundle --external:pg-native --outfile=dist/index.mjs
+          npx --yes esbuild@0.25.11 index.mjs --bundle --platform=node --target=node24 --format=esm --packages=bundle --external:pg-native --minify --outfile=dist/index.mjs
           printf '{"name":"social-videos-function","private":true,"type":"module"}\n' > dist/package.json
           cd dist
           zip -q -r ../socialvideos-function.zip index.mjs package.json
